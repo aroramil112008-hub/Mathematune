@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Lato', sans-serif; /* Changed to Lato for a softer look */
+            background-image: url("StartBG.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .bg-image {
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+            height: 100%; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .title-box {
+            background-color: #7469B6; /* Dark color for the title box */
+            box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.5), 0 10px 20px 0 rgba(0, 0, 0, 0.5); /* Enhanced shadow */
+            border-radius: 20px;
+            position: absolute;
+            top: 30%;
+            left: 25%;
+            width: 50%;
+            height: 43%;
+            padding: 20px;
+            text-align: center;
+            z-index: 1;
+        }
+        h1 {
+			color: #f8f8f8;
+            text-shadow: 2px 2px 4px #000; /* Text shadow for depth */
+			font-size: 3.5em;
+        }
+        .start-button {
+            background-color: #5D3587; /* Darker color for the button */
+            color: #FFE5E5; /* Light color for text */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .start-button:hover {
+            background-color: #A367B1; /* Lighten color on hover */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+        }
+        .floating-img {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-image"></div>
+
+<div class="title-box">
+    <h1>Mathematune</h1>
+    <button class="start-button" onclick="window.location.href='intro-page.html'">Start Game</button>
+</div>
+
+<!-- Floating images -->
+<img src="MN1.png" alt="Musical Note" class="floating-img" id="floatingImg1">
+<img src="MN2.png" alt="Musical Note" class="floating-img" id="floatingImg2">
+<img src="MS1.png" alt="Math Symbol" class="floating-img" id="floatingImg3">
+<img src="MS2.png" alt="Math Symbol" class="floating-img" id="floatingImg4">
+<img src="SR1.png" alt="Space Rock" class="floating-img" id="floatingImg5">
+<img src="SR2.png" alt="Space Rock" class="floating-img" id="floatingImg6">
+<script>
+    function floatAnimation(elementId, minX, maxX, minY, maxY, dxSpeed, dySpeed) {
+        const element = document.getElementById(elementId);
+        let x = Math.random() * (maxX - minX) + minX;
+        let y = Math.random() * (maxY - minY) + minY;
+        let dx = (Math.random() - 0.5) * dxSpeed;
+        let dy = (Math.random() - 0.5) * dySpeed;
+
+        function animate() {
+            if(x + dx > maxX || x + dx < minX) dx *= -1;
+            if(y + dy > maxY || y + dy < minY) dy *= -1;
+
+            x += dx;
+            y += dy;
+
+            element.style.left = x + 'px';
+            element.style.top = y + 'px';
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
+
+    floatAnimation('floatingImg1', 50, window.innerWidth - 150, 50, window.innerHeight - 150, 2, 2);
+    floatAnimation('floatingImg2', 50, window.innerWidth - 150, 50, window.innerHeight - 150, 2.5, 1.5);
+    floatAnimation('floatingImg3', 50, window.innerWidth - 150, 50, window.innerHeight - 150, 2, 2.5);
+    floatAnimation('floatingImg4', 50, window.innerWidth - 150, 50, window.innerHeight - 150, 1.5, 2);
+    floatAnimation('floatingImg5', 50, window.innerWidth - 150, 50, window.innerHeight - 150, 3, 1);
+    floatAnimation('floatingImg6', 50, window.innerWidth - 150, 50, window.innerHeight - 150, 1, 3);
+</script>
+
+</body>
+</html>

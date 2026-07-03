@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Lato', sans-serif;
+        background-image: url("QuestionLevel2a.jpg");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+        text-align: center;
+
+    }
+    .math-problem, .answer-section, #feedback {
+        background-color: #ffe085; /* Light yellow color for the box */
+        border: 2px solid #bcb560; /* Dark yellow-green border */
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+        border-radius: 15px;
+        padding: 15px 20px;
+        margin: 10px;
+        width: 80%;
+    }
+	.math-problem{
+		margin-left:220px;
+		margin-top:40px;
+	}
+    .answer-section {
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 20px;
+        margin-left: 300px;
+        margin-bottom: 50px;
+        width: 60%;
+    }
+    h2, p, button {
+        color: #2b2b2b; /* Dark gray text color */
+        text-shadow: 1px 1px 2px #ffffff; /* Subtle shadow for better readability */
+    }
+    p {
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+    #answerInput, #submitBtn, #nextBtn {
+        margin-top: 20px;
+    }
+    #answerInput {
+        margin-left: 25px;
+    }
+    .hidden {
+        display: none;
+    }
+    #submitBtn, #nextBtn {
+        background-color: #f28e36; /* Orange button background */
+        border: none;
+        border-radius: 15px;
+        padding: 10px 20px;
+        color: white;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+    #submitBtn:hover, #nextBtn:hover {
+        background-color: #d47a31; /* Darker orange on hover */
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="math-problem" id="mathProblem">
+        <h2 id="questionTitle"></h2>
+        <p id="questionText"></p>
+        <p id="hintText" class="hidden"></p>
+    </div>
+    <div class="answer-section">
+        <input type="text" id="answerInput" placeholder="Enter your answer">
+        <button id="submitBtn" onclick="checkAnswer()">Submit</button>
+        <button id="nextBtn" class="hidden" onclick="window.location.href='page8.html'">Next</button>
+        <p id="feedback" class="hidden"></p>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    const questions = [
+        { title: "This mushroom’s cave was disturbed by the chaos from your spaceship’s crash.", text: "The nose of the ship lies with it. To attain it, answer this question correctly: What is the value in degrees of an angle with a sine of 1/2.", hint: "Hint: You may use the unit circle as reference.", answer: "30" },
+        { title: "This slime’s masterpiece was destroyed by your spaceship’s crash.", text: "Answer this question to retrieve the wing it took: Solve for x in the equation 2x + 5 = 11.", hint: "Hint: Recall elementary algebra.", answer: "3" }
+    ];
+
+    function checkAnswer() {
+        const userAnswer = document.getElementById("answerInput").value.toLowerCase().replace(/\s/g, ''); // Sanitize input
+        const feedback = document.getElementById("feedback");
+        const hint = document.getElementById("hintText");
+        const question = questions[currentQuestion - 1];
+        if (userAnswer === question.answer.toLowerCase().replace(/\s/g, '')) { // Compare sanitized input
+            if (currentQuestion === questions.length) {
+                feedback.textContent = "Congratulations!";
+                document.getElementById("nextBtn").classList.remove("hidden");
+                document.getElementById("submitBtn").classList.add("hidden");
+            } else {
+                feedback.textContent = "Correct! Moving to the next question...";
+                currentQuestion++;
+                setTimeout(() => {
+                    updateQuestion();
+                }, 2000);
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        } else {
+            feedback.textContent = "Wrong, try again.";
+            hint.classList.remove("hidden"); // Show the hint
+        }
+        feedback.classList.remove("hidden");
+    }
+
+    function updateQuestion() {
+        const question = questions[currentQuestion - 1];
+        document.getElementById("questionTitle").textContent = question.title;
+        document.getElementById("questionText").textContent = question.text;
+        document.getElementById("hintText").textContent = question.hint; // Update hint text
+        document.getElementById("answerInput").value = ''; 
+        document.getElementById("feedback").classList.add("hidden");
+        document.getElementById("hintText").classList.add("hidden"); // Hide the hint by default
+
+        // Change background after the first question
+        if (currentQuestion === 2) {
+            document.body.style.backgroundImage = "url('QuestionLevel2b.jpg')";
+        }
+    }
+
+    // Initial question setup
+    updateQuestion();
+</script>
+
+</body>
+</html>

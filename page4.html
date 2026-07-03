@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Lato', sans-serif; /* Updated font family */
+            background-image: url("QuestionLevel1.png");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: 100%;
+            text-align: center;
+        }
+        .math-problem, .answer-section, #feedback {
+            background-color: #ffffe0; /* Soft yellow background */
+			border: 2px solid #f7e1af; /* Light border color */
+			box-shadow: 0px 8px 16px 0px rgba(46, 61, 73, 0.2);
+			border-radius: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 10px;
+            margin: 10px;
+            width: 80%;
+            border-radius: 8px; /* Added for a softer look */
+        }
+		#feedback {
+			padding-bottom:10px;
+		}
+		.answer-section{
+			padding-bottom:10px;
+        }
+        .math-problem {
+            transform: translateX(130px);
+        }
+        .answer-section {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 20px;
+            margin-left: 300px;
+            margin-bottom: 50px;
+            width: 60%;
+        }
+        h2, p, button {
+            color: #5c3c1f; /* Dark brown text for better readability */
+			text-shadow: 0px 1px 3px #ffd699; /* Soft shadow for depth */
+        }
+		p {
+			margin-top:-10px;
+			margin-bottom:10px;
+		}
+        #answerInput, #submitBtn, #nextBtn {
+            margin-top: 20px;
+        }
+        #answerInput {
+            margin-left: 25px;
+        }
+        .hidden {
+            display: none;
+        }
+		#submitBtn, #nextBtn {
+			background-color: #a2d149; /* Cheerful green */
+			border: none;
+			border-radius: 20px;
+			padding: 10px 20px;
+			color: white;
+			text-transform: uppercase;
+			font-weight: bold;
+			letter-spacing: 0.05em;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+			transition: background-color 0.3s ease;
+		}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="math-problem" id="mathProblem">
+        <h2 id="questionTitle">A square house was destroyed by your spaceship’s crash</h2>
+        <p id="questionText">Answer this question to fix the house: What is the perimeter of a square with a side length of 5 cm?</p>
+        <p id="hintText" class="hidden"></p> <!-- Hint section added -->
+    </div>
+    <div class="answer-section">
+        <input type="number" id="answerInput" placeholder="Enter your answer in cm">
+        <button id="submitBtn" onclick="checkAnswer()">Submit</button>
+        <button id="nextBtn" class="hidden" onclick="window.location.href='page5.html'">Next</button>
+        <p id="feedback" class="hidden"></p>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    const questions = [
+        { title: "A square house was destroyed by your spaceship’s crash", text: "Answer this question to fix the house: What is the perimeter of a square with a side length of 5 cm?", hint: "Hint: The perimeter is all the sides added together", answer: "20" },
+        { title: "A triangular market stall was hit by one of your spaceship’s parts", text: "Answer this question to fix the stall: What is the perimeter of an equilateral triangle with a side length of 10 cm?", hint: "Hint: A triangle has 3 sides", answer: "30" },
+        { title: "To retrieve a spaceship part, answer this question", text: "What is the measure of the third angle of a triangle with 30 and 60 degree angles?", hint: "Hint: The angles of a triangle add up to 180", answer: "90" },
+        { title: "A crop farm was damaged by the smoke released from your spaceship’s crash", text: "Answer this question to relieve the crops: What is the area of a square with a side length of 10 cm?", hint: "Hint: The area of a square is equal to the measure of its side multiplied to itself", answer: "100" },
+        { title: "A compound school was affected by one of your spaceship’s parts flying into the roof", text: "Answer this question to fix the walls: What is the combined area of 2 squares with side lengths of 6 and 4?", hint: "Hint: Add together the individual areas of the 2 squares", answer: "52" }
+    ];
+
+    function checkAnswer() {
+        const userAnswer = document.getElementById("answerInput").value;
+        const feedback = document.getElementById("feedback");
+        const question = questions[currentQuestion - 1];
+        if (userAnswer === question.answer) {
+            if (currentQuestion === questions.length) {
+                feedback.textContent = "Congratulations!";
+                document.getElementById("nextBtn").classList.remove("hidden");
+                document.getElementById("submitBtn").classList.add("hidden");
+            } else {
+                feedback.textContent = "Correct! Moving to the next question...";
+                currentQuestion++;
+                setTimeout(() => {
+                    updateQuestion();
+                }, 2000);
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        } else {
+            feedback.textContent = "Wrong, try again.";
+            document.getElementById("hintText").classList.remove("hidden"); // Show the hint
+        }
+        feedback.classList.remove("hidden");
+    }
+
+    function updateQuestion() {
+        const question = questions[currentQuestion - 1];
+        document.getElementById("questionTitle").textContent = question.title;
+        document.getElementById("questionText").textContent = question.text;
+        document.getElementById("hintText").textContent = question.hint; // Update hint text
+        document.getElementById("answerInput").value = ''; 
+        document.getElementById("feedback").classList.add("hidden");
+        document.getElementById("hintText").classList.add("hidden"); // Hide the hint by default
+    }
+
+    // Initial question setup
+    updateQuestion();
+</script>
+
+</body>
+</html>
